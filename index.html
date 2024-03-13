@@ -61,9 +61,11 @@
 		-moz-border-radius-bottomright: 5px;
 		-khtml-border-radius-bottomright: 5px;
 		-webkit-border-bottom-right-radius: 5px;
+		border-bottom-right-radius: 5px;
 		-moz-border-radius-bottomleft: 5px;
 		-khtml-border-radius-bottomleft: 5px;
 		-webkit-border-bottom-left-radius: 5px;
+		border-bottom-left-radius: 5px;
 	}
 	.tab_content {
 		padding: 20px;
@@ -90,7 +92,8 @@
 	<script language="javascript" src="passchk_test.js"></script>
 	<script type="text/javascript">
 		window.onload = function() {
-		  generatePassword();
+		  const password = generatePassword(22);
+		  document.getElementById("passchk_field").value = password;
 		}
 		function generatePassword(length) {
 		  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
@@ -103,8 +106,6 @@
 			password += charset.charAt(index);
 		  }
 		  return password;
-		  const password = generatePassword(22);
-		  document.getElementById("passchk_field").value = password;
 		}
 	</script>
 	<script type="text/javascript">
