@@ -1,21 +1,3 @@
-<?php
-
-function passgen($length){
-  $chars =  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.
-            '0123456789';
-
-  $str = '';
-  $max = strlen($chars) - 1;
-
-  for ($i=0; $i < $length; $i++)
-    $str .= $chars[rand(0, $max)];
-
-  return $str;
-}
-
-?>
-
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -107,24 +89,43 @@ function passgen($length){
     <script language="javascript" src="passchk_fast.js"></script>
 	<script language="javascript" src="passchk_test.js"></script>
 	<script type="text/javascript">
-	$(document).ready(function() {
+		window.onload = function() {
+		  generatePassword();
+		}
+		function generatePassword(length) {
+		  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+		  const charsetLength = charset.length;
+		  let password = "";
+		  const randomValues = new Uint8Array(length);
+		  window.crypto.getRandomValues(randomValues);
+		  for (let i = 0; i < length; i++) {
+			const index = randomValues[i] % charsetLength;
+			password += charset.charAt(index);
+		  }
+		  return password;
+		  const password = generatePassword(22);
+		  document.getElementById("passchk_field").value = password;
+		}
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
 
-		//Default Action
-		$(".tab_content").hide(); //Hide all content
-		$("ul.tabs li:first").addClass("active").show(); //Activate first tab
-		$(".tab_content:first").show(); //Show first tab content
-		
-		//On Click Event
-		$("ul.tabs li").click(function() {
-			$("ul.tabs li").removeClass("active"); //Remove any "active" class
-			$(this).addClass("active"); //Add "active" class to selected tab
-			$(".tab_content").hide(); //Hide all tab content
-			var activeTab = $(this).find("a").attr("href"); //Find the rel attribute value to identify the active tab + content
-			$(activeTab).fadeIn(); //Fade in the active content
-			return false;
+			//Default Action
+			$(".tab_content").hide(); //Hide all content
+			$("ul.tabs li:first").addClass("active").show(); //Activate first tab
+			$(".tab_content:first").show(); //Show first tab content
+			
+			//On Click Event
+			$("ul.tabs li").click(function() {
+				$("ul.tabs li").removeClass("active"); //Remove any "active" class
+				$(this).addClass("active"); //Add "active" class to selected tab
+				$(".tab_content").hide(); //Hide all tab content
+				var activeTab = $(this).find("a").attr("href"); //Find the rel attribute value to identify the active tab + content
+				$(activeTab).fadeIn(); //Fade in the active content
+				return false;
+			});
+
 		});
-
-	});
 	</script>
 </head>
 <body>
@@ -142,7 +143,7 @@ function passgen($length){
 			<p>
             <h3>Here, try this password on for size:</h3>
 			<form method="POST" action="#" onSubmit="return false" name="passchk_form">
-			<input type="text" size="40" id="passchk_field" value="<?php echo passgen(rand(20, 22)); ?>" style="text-align:center;"> <i><- Feel free to enter your own password to test it.</i>
+			<input type="text" size="40" id="passchk_field" value="" style="text-align:center;"> <i><- Feel free to enter your own password to test it.</i>
 			</form>
 			<span id="passchk_result">Loading...</span>
 			Your password can be brute forced in <span id="time">less than one second</span> (based on 300 billion guesses per second, <a href="https://twitter.com/Chick3nman512/status/1580712040179826688" target="_blank">the rate of a RTX 4090 as of October 2022</a>).
@@ -163,15 +164,5 @@ function passgen($length){
         </div>
     </div>
 </div>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-5350997-21', 'rand.pw');
-  ga('send', 'pageview');
-
-</script>
 </body>
 </html>
